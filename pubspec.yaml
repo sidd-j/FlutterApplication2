@@ -1,0 +1,43 @@
+name: flutterapiapp
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^1.0.6
+  intl_phone_field: ^3.2.0
+  http: ^1.2.1
+  shared_preferences:
+  jwt_decoder:
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+ 
+    - lib/Images/background.jpg
+    - lib/Images/logo.png
+    - lib/Images/logo.svg
+
+
+
+ 
+
+
+
+
+ 
