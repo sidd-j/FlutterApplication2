@@ -94,74 +94,75 @@ class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor:
-            const Color.fromARGB(255, 0, 0, 0), // Set the background color here
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(
+              255, 0, 0, 0), // Set the background color here
 
-        title: const Text('Home Page',
-            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
-        actions: [
-          IconButton(
-            onPressed: () => signOutUser(context),
-            icon: const Icon(
-              Icons.logout,
-              color: Colors.white,
+          title: const Text('Home Page',
+              style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+          actions: [
+            IconButton(
+              onPressed: () => signOutUser(context),
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
             ),
-          ),
-        ],
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('lib/Images/background.jpg'),
-            fit: BoxFit.cover,
-          ),
+          ],
         ),
-        child: Center(
+        body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.fromLTRB(
-                10, MediaQuery.of(context).size.height * 0.3, 10, 10),
-            color: Color.fromARGB(149, 6, 6, 6),
-            height: MediaQuery.of(context).size.height * 1,
-            width: MediaQuery.of(context).size.width * 1,
-            child: Column(
-              children: [
-                Text(
-                  'Welcome, $email',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontFamily: 'Kanit',
-                  ),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('lib/Images/background.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.fromLTRB(
+                    10, MediaQuery.of(context).size.height * 0.3, 10, 10),
+                color: Color.fromARGB(149, 6, 6, 6),
+                height: MediaQuery.of(context).size.height * 1,
+                width: MediaQuery.of(context).size.width * 1,
+                child: Column(
+                  children: [
+                    Text(
+                      'Welcome, $email',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 90,
+                    ),
+                    Text(
+                      userData ?? '',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontFamily: 'Kanit',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 90,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        getUserData(email);
+                      },
+                      child: Text('Get Data'),
+                    ),
+                    SigninButton(context, false, () {
+                      navto();
+                    }, "View Profile", bttnColor, textColor)
+                  ],
                 ),
-                const SizedBox(
-                  height: 90,
-                ),
-                Text(
-                  userData ?? '',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontFamily: 'Kanit',
-                  ),
-                ),
-                const SizedBox(
-                  height: 90,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    getUserData(email);
-                  },
-                  child: Text('Get Data'),
-                ),
-                SigninButton(context, false, () {
-                  navto();
-                }, "View Profile", bttnColor, textColor)
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

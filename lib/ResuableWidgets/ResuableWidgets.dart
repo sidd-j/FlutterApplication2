@@ -4,18 +4,25 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 TextField CustomTextField(String text, IconData icon, bool isPasswordType,
     TextEditingController controller, Color ColorPlate,
-    {String? errorText, TextInputType inputType = TextInputType.text}) {
+    {void Function()? onPress,
+    String? errorText,
+    TextInputType inputType = TextInputType.text,
+    TextInputType? datetime}) {
   return TextField(
     controller: controller,
     obscureText: isPasswordType,
     enableSuggestions: !isPasswordType,
     autocorrect: !isPasswordType,
     cursorColor: Colors.white,
+    keyboardType: datetime ?? inputType,
     style: TextStyle(color: Colors.white.withOpacity(0.9)),
     decoration: InputDecoration(
-      prefixIcon: Icon(
-        icon,
-        color: const Color.fromARGB(255, 255, 251, 251),
+      prefixIcon: GestureDetector(
+        onTap: onPress,
+        child: Icon(
+          icon,
+          color: const Color.fromARGB(255, 255, 251, 251),
+        ),
       ),
       labelText: text,
       labelStyle: TextStyle(
@@ -28,7 +35,6 @@ TextField CustomTextField(String text, IconData icon, bool isPasswordType,
           borderRadius: BorderRadius.circular(30.0),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none)),
     ),
-    keyboardType: inputType,
   );
 }
 

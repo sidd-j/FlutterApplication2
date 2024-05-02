@@ -17,6 +17,7 @@ dependencies:
   http: ^1.2.1
   shared_preferences:
   jwt_decoder:
+  add_2_calendar: ^2.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

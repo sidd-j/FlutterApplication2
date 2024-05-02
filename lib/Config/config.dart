@@ -1,4 +1,4 @@
-final url = 'http://192.168.0.107:3000/';
+final url = 'http://nodeapi-env.eba-zvsgkf9a.ap-south-1.elasticbeanstalk.com/';
 
 final registration = url + "registration";
 final login = url + "login";
