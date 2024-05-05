@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterapiapp/Pages/LoginPage.dart';
 import 'package:flutterapiapp/Pages/welcome.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutterapiapp/Pages/LoginPageS.dart';
 
 class SplashScreen extends StatefulWidget {
   final String token; // Declare token as a required parameter

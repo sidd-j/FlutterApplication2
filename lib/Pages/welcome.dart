@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutterapiapp/Config/config.dart';
-import 'package:flutterapiapp/Pages/LoginPage.dart';
 import 'package:flutterapiapp/Pages/editProfile.dart';
 import 'package:flutterapiapp/ResuableWidgets/ResuableWidgets.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutterapiapp/Pages/LoginPageS.dart';
 
 class Welcome extends StatefulWidget {
   final token;
@@ -21,7 +21,6 @@ class _WelcomeState extends State<Welcome> {
   final Color fieldColor = Color.fromARGB(86, 255, 255, 255);
   final Color bttnColor = Color.fromARGB(255, 255, 255, 255);
   final Color textColor = Color.fromARGB(255, 0, 0, 0);
-
   String? userData;
   @override
   void initState() {
@@ -29,10 +28,12 @@ class _WelcomeState extends State<Welcome> {
     Map<String, dynamic> jwtdecdedToken = JwtDecoder.decode(widget.token);
 
     email = jwtdecdedToken['email'];
+    getUserData(email);
   }
 
   void signOutUser(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     prefs.setString("token", "");
 
     Navigator.pushReplacement(
@@ -41,26 +42,27 @@ class _WelcomeState extends State<Welcome> {
     );
   }
 
+// Declare userDataJson outside of the method
+  Map<String, dynamic>? userDataJson;
+
   Future<void> getUserData(email) async {
     try {
-      var url = userdata;
-
       // Send the GET request
-      var response = await http.get(Uri.parse(url + '?email=$email'));
+      var response = await http.get(Uri.parse('$userdata?email=$email'));
+      print(url);
 
-      // Check if the request was successful
+      print(response.body);
       if (response.statusCode == 200) {
-        // Print the response body (JSON data)
         var UserData = jsonDecode(response.body);
-        var userDataJson = UserData['data'];
+        userDataJson = UserData['data'];
 
         // Format the extracted data for display
         var formattedData = '''
-        Email: ${userDataJson['email']}
-        Name: ${userDataJson['name']}
-        Country: ${userDataJson['country']}
-        Phone Number: ${userDataJson['phone_num']}
-      ''';
+      Email: ${userDataJson?['email']}
+      Name: ${userDataJson?['name']}
+      Country: ${userDataJson?['country']}
+      Phone Number: ${userDataJson?['phone_num']}
+    ''';
 
         // Update the userData state variable
         setState(() {
@@ -73,17 +75,6 @@ class _WelcomeState extends State<Welcome> {
     }
   }
 
-  displayUserData() {
-    return Text(
-      userData ?? '',
-      style: const TextStyle(
-        color: Colors.white,
-        fontSize: 15,
-        fontFamily: 'Kanit',
-      ),
-    );
-  }
-
   navto() {
     Navigator.pushReplacement(
       context,
@@ -94,75 +85,81 @@ class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(
-              255, 0, 0, 0), // Set the background color here
+      appBar: AppBar(
+        backgroundColor:
+            const Color.fromARGB(255, 0, 0, 0), // Set the background color here
 
-          title: const Text('Home Page',
-              style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
-          actions: [
-            IconButton(
-              onPressed: () => signOutUser(context),
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
+        title: const Text('Home Page',
+            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255))),
+        actions: [
+          IconButton(
+            onPressed: () => signOutUser(context),
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.white,
             ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('lib/Images/background.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Center(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(
-                    10, MediaQuery.of(context).size.height * 0.3, 10, 10),
-                color: Color.fromARGB(149, 6, 6, 6),
-                height: MediaQuery.of(context).size.height * 1,
-                width: MediaQuery.of(context).size.width * 1,
-                child: Column(
-                  children: [
-                    Text(
-                      'Welcome, $email',
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(color: Colors.black),
+          child: Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(
+                        MediaQuery.of(context).size.height * 0.1,
+                        MediaQuery.of(context).size.height * 0.1,
+                        10,
+                        20),
+                    decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 79, 89, 1),
+                        borderRadius:
+                            BorderRadius.only(bottomLeft: Radius.circular(50))),
+                    height: 150,
+                    width: MediaQuery.of(context).size.width,
+                    child: Text(
+                      'Welcome, ${userDataJson?["name"]}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 25,
                         fontFamily: 'Kanit',
                       ),
                     ),
-                    const SizedBox(
-                      height: 90,
-                    ),
-                    Text(
-                      userData ?? '',
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: SigninButton(context, false, () {
+                      navto();
+                    }, "View Profile", bttnColor, textColor),
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(
+                        MediaQuery.of(context).size.height * 0.1,
+                        MediaQuery.of(context).size.height * 0.1,
+                        10,
+                        20),
+                    height: MediaQuery.of(context).size.height,
+                    child: Text(
+                      'Name : ${userDataJson?["name"]}\nEmail id : ${userDataJson?["email"]}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontFamily: 'Kanit',
                       ),
                     ),
-                    const SizedBox(
-                      height: 90,
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        getUserData(email);
-                      },
-                      child: Text('Get Data'),
-                    ),
-                    SigninButton(context, false, () {
-                      navto();
-                    }, "View Profile", bttnColor, textColor)
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
